@@ -1,24 +1,50 @@
-import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import HomeScreen from './screens/HomeScreen'
-import IssLocationScreen from './screens/IssLocationScreen'
-import MeteorScreen from './screens/MeteorScreen'
 
-const Stack = createStackNavigator();
+import React from 'react';
+import { StyleSheet, Text, View, Image } from 'react-native';
+import {createAppContainer,createSwitchNavigator} from "react-navigation" ;
+import {createBottomTabNavigator} from "react-navigation-tabs";
+import SearchScreen from "./screen/searchScreen";
+import TransactionScreen from "./screen/transactionScreen";
+import LoginScreen from "./screen/loginScreen";
+import loginScreen from './screen/loginScreen';
 
-export default class App extends Component {
-  render(){
+
+export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName='Home'
-      screenOptions={{headerShown:false}}>
-        <Stack.Screen name='Home'Component={HomeScreen}/>
-        <Stack.Screen name='IssLocation'Component={IssLocationScreen}/>
-        <Stack.Screen name='Meteor'Component={MeteorScreen}/>
-      </Stack.Navigator>
-    </NavigationContainer>
+   <AppContainer/>
   );
 }
+var TabNavigator=createBottomTabNavigator({
+Search:{screen:SearchScreen},
+Transaction:{screen:TransactionScreen}
+},
+{defaultNavigationOptions:({navigation})=>{
+  tabBarIcon:()=>{
+    const routeName=navigation.state.routeName
+    if(routeName==='Transaction'){
+      return(
+        <Image
+        source={require('./assets/book.png')}
+        style={{width:20,
+        height:20}}
+        />
+      )
+    }
+    else if(routeName==='Search'){
+      return(
+        <Image
+        source={require('./assets/searchingbook.png')}
+        style={{width:100,
+          height:100}}
+        />
+      )
+    }
+  }
 }
+}
+)
+const SwitchNavigator=createSwitchNavigator({
+  LoginScreen:{screen:loginScreen},
+  TabNavigator:{screen:TabNavigator}
+})
+const AppContainer=createAppContainer(SwitchNavigator)
